@@ -5,12 +5,17 @@ import colorama
 import requests
 
 from colorama import just_fix_windows_console
+
 just_fix_windows_console()
 
 battleTypeId = 2
 validTypes = ["regularSchedules", "bankaraSchedules", "xSchedules"]
 validMatchSettings = ["regularMatchSetting", "bankaraMatchSettings", "xMatchSetting"]
-formattedSettings = [f"{colorama.Fore.GREEN}Regular Battle{colorama.Fore.RESET}", f"{colorama.Fore.YELLOW}Anarchy Battle{colorama.Fore.RESET}", f"{colorama.Fore.CYAN}X Battle{colorama.Fore.RESET}"]
+formattedSettings = [
+    f"{colorama.Fore.GREEN}Regular Battle{colorama.Fore.RESET}",
+    f"{colorama.Fore.YELLOW}Anarchy Battle{colorama.Fore.RESET}",
+    f"{colorama.Fore.CYAN}X Battle{colorama.Fore.RESET}",
+]
 
 rawData = open("./schedules.json")
 data = json.loads(rawData.read())
@@ -56,7 +61,12 @@ def timeToFormattedLocal(changeTime: time.struct_time):
     changeTime = time.strftime("%H:%M", changeTime)
     return changeTime
 
-if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["regularSchedules"]["nodes"])-2]) < calendar.timegm(time.gmtime()):
+
+if getNodeEndTime(
+    data["data"]["regularSchedules"]["nodes"][
+        len(data["data"]["regularSchedules"]["nodes"]) - 2
+    ]
+) < calendar.timegm(time.gmtime()):
     print("data seems old, updating now...")
     download = requests.get("https://splatoon3.ink/data/schedules.json")
     open("./schedules.json", "w").write(download.text)
@@ -67,12 +77,17 @@ if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["re
 # only matters for bankara (anarchy)
 validModes = ["CHALLENGE", "OPEN"]
 formattedModes = ["Series", "Open"]
-modeId = 0 #default
+modeId = 0  # default
 
 print(f"{colorama.Style.DIM}Current Time: {time.strftime('%H:%M', time.localtime())}")
 while True:
     try:
-        battleTypeId = int(input(f"{colorama.Style.NORMAL}Choose from the following:\n0 - {formattedSettings[0]}\n1 - {formattedSettings[1]} (default)\n2 - {formattedSettings[2]}\n") or 1)
+        battleTypeId = int(
+            input(
+                f"{colorama.Style.NORMAL}Choose from the following:\n0 - {formattedSettings[0]}\n1 - {formattedSettings[1]} (default)\n2 - {formattedSettings[2]}\n"
+            )
+            or 1
+        )
     except:
         print("Couldn't understand your input. Try again.")
         continue
@@ -81,7 +96,12 @@ while True:
 if battleTypeId == 1:
     while True:
         try:
-            modeId = int(input(f"Choose:\n0 - {formattedModes[0]} (default)\n1 - {formattedModes[1]}\n") or 0)
+            modeId = int(
+                input(
+                    f"Choose:\n0 - {formattedModes[0]} (default)\n1 - {formattedModes[1]}\n"
+                )
+                or 0
+            )
         except:
             print("Couldn't understand your input. Try again.")
             continue
