@@ -56,7 +56,7 @@ def timeToFormattedLocal(changeTime: time.struct_time):
     changeTime = time.strftime("%H:%M", changeTime)
     return changeTime
 
-if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["regularSchedules"]["nodes"])-1]) < calendar.timegm(time.gmtime()):
+if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["regularSchedules"]["nodes"])-2]) < calendar.timegm(time.gmtime()):
     print("data seems old, updating now...")
     download = requests.get("https://splatoon3.ink/data/schedules.json")
     open("./schedules.json", "w").write(download.text)

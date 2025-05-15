@@ -55,7 +55,7 @@ def timeToFormattedLocal(changeTime: time.struct_time):
     changeTime = time.strftime("%H:%M", changeTime)
     return changeTime
 
-if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["regularSchedules"]["nodes"])-1]) < calendar.timegm(time.gmtime()):
+if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["regularSchedules"]["nodes"])-2]) < calendar.timegm(time.gmtime()):
     print("data seems old, updating now...")
     download = requests.get("https://splatoon3.ink/data/schedules.json")
     open("./schedules.json", "w").write(download.text)
@@ -115,3 +115,5 @@ nextXBattleMaps = getMapNames(nextXBattle)
 
 print(f"{formattedSettings[2]}: {xBattle['vsRule']['name']} on {xBattleMaps[0]} and {xBattleMaps[1]}")
 print(f"{colorama.Style.DIM}{nextXBattle['vsRule']['name']} on {nextXBattleMaps[0]} and {nextXBattleMaps[1]}{colorama.Style.NORMAL}\n")
+
+print(f"{colorama.Style.DIM}Data from splatoon3.ink{colorama.Style.NORMAL}")
