@@ -69,7 +69,7 @@ validModes = ["CHALLENGE", "OPEN"]
 formattedModes = ["Series", "Open"]
 modeId = 0 #default
 
-print(f"{colorama.Style.DIM}Current Time: {time.strftime("%H:%M", time.localtime())}")
+print(f"{colorama.Style.DIM}Current Time: {time.strftime('%H:%M', time.localtime())}")
 while True:
     try:
         battleTypeId = int(input(f"{colorama.Style.NORMAL}Choose from the following:\n0 - {formattedSettings[0]}\n1 - {formattedSettings[1]} (default)\n2 - {formattedSettings[2]}\n") or 1)
