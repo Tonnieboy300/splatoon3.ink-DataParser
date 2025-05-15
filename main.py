@@ -7,7 +7,6 @@ import requests
 from colorama import just_fix_windows_console
 just_fix_windows_console()
 
-battleTypeId = 2
 validTypes = ["regularSchedules", "bankaraSchedules", "xSchedules"]
 validMatchSettings = ["regularMatchSetting", "bankaraMatchSettings", "xMatchSetting"]
 formattedSettings = [f"{colorama.Fore.GREEN}Regular Battle{colorama.Fore.RESET}", f"{colorama.Fore.YELLOW}Anarchy Battle{colorama.Fore.RESET}", f"{colorama.Fore.CYAN}X Battle{colorama.Fore.RESET}"]
@@ -67,59 +66,52 @@ if getNodeEndTime(data["data"]["regularSchedules"]["nodes"][len(data["data"]["re
 # only matters for bankara (anarchy)
 validModes = ["CHALLENGE", "OPEN"]
 formattedModes = ["Series", "Open"]
-modeId = 0 #default
 
-print(f"{colorama.Style.DIM}Current Time: {time.strftime('%H:%M', time.localtime())}")
-while True:
-    try:
-        battleTypeId = int(input(f"{colorama.Style.NORMAL}Choose from the following:\n0 - {formattedSettings[0]}\n1 - {formattedSettings[1]} (default)\n2 - {formattedSettings[2]}\n") or 1)
-    except:
-        print("Couldn't understand your input. Try again.")
-        continue
-    break
+print(f"{colorama.Style.DIM}Current Time: {time.strftime('%H:%M', time.localtime())}{colorama.Style.NORMAL}")
 
-if battleTypeId == 1:
-    while True:
-        try:
-            modeId = int(input(f"Choose:\n0 - {formattedModes[0]} (default)\n1 - {formattedModes[1]}\n") or 0)
-        except:
-            print("Couldn't understand your input. Try again.")
-            continue
-        break
 
-battleType = validTypes[battleTypeId]
-matchSetting = validMatchSettings[battleTypeId]
-
-mode = validModes[modeId]
-
-currentFormattedSetting = formattedSettings[battleTypeId]
-seriesType = formattedModes[modeId]
-currentFormattedSetting = (
-    currentFormattedSetting
-    if currentFormattedSetting != formattedSettings[1]
-    else f"{currentFormattedSetting} {seriesType}"
-)
-
-currentNode = getNode(battleType, time.gmtime())
-currentSetting = getMatchSetting(matchSetting, currentNode, mode)
-currentMode = currentSetting["vsRule"]["name"]
-currentMaps = getMapNames(currentSetting)
-
-nodeEndTime = getNodeEndTime(currentNode)
+regularBattleNode = getNode(validTypes[0],time.gmtime())
+regularBattle = getMatchSetting(validMatchSettings[0],regularBattleNode)
+regularBattleMaps = getMapNames(regularBattle)
+nodeEndTime = getNodeEndTime(regularBattleNode)
+nextRegularNode = getNode(validTypes[0],time.gmtime(nodeEndTime))
+nextRegular = getMatchSetting(validMatchSettings[0],nextRegularNode)
+nextRegularMaps = getMapNames(nextRegular)
 changeTime = timeToFormattedLocal(nodeEndTime)
+nextChangeTime = timeToFormattedLocal(getNodeEndTime(nextRegularNode))
 
-nextNode = getNode(battleType, time.gmtime(nodeEndTime))
-nextSetting = getMatchSetting(matchSetting, nextNode, mode)
-nextMode = nextSetting["vsRule"]["name"]
-nextMaps = getMapNames(nextSetting)
+print(f"Schedule until {changeTime}")
+print(f"{colorama.Style.DIM}Schedule from {changeTime} until {nextChangeTime}{colorama.Style.NORMAL}\n")
 
-nextNodeEndTime = getNodeEndTime(nextNode)
-nextChangeTime = timeToFormattedLocal(nextNodeEndTime)
+print(f"{formattedSettings[0]}: {regularBattle['vsRule']['name']} on {regularBattleMaps[0]} and {regularBattleMaps[1]}")
+print(f"{colorama.Style.DIM}{nextRegular['vsRule']['name']} on {nextRegularMaps[0]} and {nextRegularMaps[1]}{colorama.Style.NORMAL}\n")
 
-print(
-    f"Currently on {currentFormattedSetting} until {changeTime}: {currentMode} on {currentMaps[0]} and {currentMaps[1]}."
-)
-print(
-    f"{colorama.Style.DIM}Next from {changeTime} to {nextChangeTime}: {nextMode} on {nextMaps[0]} and {nextMaps[1]}{colorama.Style.RESET_ALL}"
-)
-print(f"{colorama.Style.DIM}Data from splatoon3.ink{colorama.Style.RESET_ALL}")
+anarchyBattleNode = getNode(validTypes[1],time.gmtime())
+anarchyBattleS = getMatchSetting(validMatchSettings[1],anarchyBattleNode,validModes[0])
+anarchyMapS = getMapNames(anarchyBattleS)
+anarchyBattleO = getMatchSetting(validMatchSettings[1],anarchyBattleNode,validModes[1])
+anarchyMapO = getMapNames(anarchyBattleO)
+
+
+nextAnarchyNode = getNode(validTypes[1],time.gmtime(nodeEndTime))
+nextAnarchyBattleS = getMatchSetting(validMatchSettings[1],nextAnarchyNode,validModes[0])
+nextAnarchyMapS = getMapNames(nextAnarchyBattleS)
+nextAnarchyBattleO = getMatchSetting(validMatchSettings[1],nextAnarchyNode,validModes[1])
+nextAnarchyMapO = getMapNames(nextAnarchyBattleO)
+
+print(f"{formattedSettings[1]} {formattedModes[0]}: {anarchyBattleS['vsRule']['name']} on {anarchyMapS[0]} and {anarchyMapS[1]}")
+print(f"{colorama.Style.DIM}{nextAnarchyBattleS['vsRule']['name']} on {nextAnarchyMapS[0]} and {nextAnarchyMapS[1]}{colorama.Style.NORMAL}\n")
+
+print(f"{formattedSettings[1]} {formattedModes[1]}: {anarchyBattleO['vsRule']['name']} on {anarchyMapO[0]} and {anarchyMapO[1]}")
+print(f"{colorama.Style.DIM}{nextAnarchyBattleO['vsRule']['name']} on {nextAnarchyMapO[0]} and {nextAnarchyMapO[1]}{colorama.Style.NORMAL}\n")
+
+xBattleNode = getNode(validTypes[2],time.gmtime())
+xBattle = getMatchSetting(validMatchSettings[2],xBattleNode)
+xBattleMaps = getMapNames(xBattle)
+
+nextXBattleNode = getNode(validTypes[2],time.gmtime(nodeEndTime))
+nextXBattle = getMatchSetting(validMatchSettings[2],nextXBattleNode)
+nextXBattleMaps = getMapNames(nextXBattle)
+
+print(f"{formattedSettings[2]}: {xBattle['vsRule']['name']} on {xBattleMaps[0]} and {xBattleMaps[1]}")
+print(f"{colorama.Style.DIM}{nextXBattle['vsRule']['name']} on {nextXBattleMaps[0]} and {nextXBattleMaps[1]}{colorama.Style.NORMAL}\n")
