@@ -16,7 +16,7 @@ formattedSettings = [
     f"{colorama.Fore.CYAN}X Battle{colorama.Fore.RESET}",
 ]
 
-rawData = open("./schedules.json")
+rawData = open("./schedules.json",encoding="utf-8")
 data = json.loads(rawData.read())
 
 
@@ -68,7 +68,7 @@ if getNodeEndTime(
 ) < calendar.timegm(time.gmtime()):
     print("data seems old, updating now...")
     download = requests.get("https://splatoon3.ink/data/schedules.json")
-    open("./schedules.json", "w").write(download.text)
+    open("./schedules.json", "w",encoding="utf-8").write(download.text)
     rawData = open("./schedules.json")
     data = json.loads(rawData.read())
     print("done!")
