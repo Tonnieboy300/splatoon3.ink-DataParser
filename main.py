@@ -62,7 +62,7 @@ def updateDataIfNeeded(forceUpdate: bool = False, message: str = "data seems old
             download = requests.get("https://splatoon3.ink/data/schedules.json")
         except Exception as e:
             print(f"{colorama.Fore.RED}connection error:{colorama.Fore.RESET}", e)
-            sys.exit
+            sys.exit()
         open("./schedules.json", "w",encoding="utf-8").write(download.text)
         rawData = open("./schedules.json")
         data = json.loads(rawData.read())
